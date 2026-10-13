@@ -1,0 +1,61 @@
+[project]
+name = "diaggpsd"
+version = "0.1.0"
+description = "Live GNSS from a Qualcomm modem's DIAG stream — serves gpsd clients and writes RINEX"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+# Hard, import-time dependencies — both inward edges to already-public siblings:
+#   - diagmunge: the DIAG transport core (DiagClient + DIAG_LOG_F), imported at
+#     module scope in diaggpsd.py / diag_setup.py / dump_pos_report.py and via
+#     diagmunge.munge.replay in dlf_to_jsonl.py.
+#   - diaggrok:  the GNSS log-record parsers, imported at module scope through
+#     the gnss_packets.py re-export shim.
+# Edge direction is inward-only: diaggpsd -> {diagmunge, diaggrok}. Never the
+# reverse. Neither sibling is on PyPI yet, so a bare name would not resolve:
+# both come from the public git remotes, pinned to the release tags this
+# package's full suite was verified against in an isolated venv. Bump
+# the tags with each re-verify; repoint to `diaggrok>=X.Y` / `diagmunge>=X.Y`
+# once they are published.
+dependencies = [
+    "diaggrok @ git+https://github.com/lukejenkins/diaggrok@v2026.10.12",
+    "diagmunge @ git+https://github.com/lukejenkins/diagmunge@v2026.10.13",
+]
+
+[project.optional-dependencies]
+# The live AT-port path (at.py) imports pyserial lazily, inside the serial
+# adapter constructor — only talking to a real modem's AT port needs it. DIAG
+# capture, replay, decode, RINEX, and the gpsd server are all pyserial-free.
+# pyserial IS on PyPI, so it stays a bare name.
+serial = ["pyserial"]
+
+[project.scripts]
+# The live daemon: DIAG -> gpsd JSON server (+ optional RINEX).
+diaggpsd = "diaggpsd:main"
+# Offline tooling shipped alongside the daemon.
+diaggpsd-diag-setup = "diag_setup:main"
+diaggpsd-dlf-to-jsonl = "dlf_to_jsonl:main"
+diaggpsd-dump-pos-report = "dump_pos_report:main"
+diaggpsd-gnss-compare = "gnss_compare:main"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+# Script collection, not an installable package tree: in the public carve each
+# module is copied to the repo root beside this file. `gnss_packets` is a thin
+# re-export shim over the diaggrok parsers.
+[tool.setuptools]
+py-modules = [
+    "diaggpsd",
+    "at",
+    "diag_setup",
+    "dlf_to_jsonl",
+    "dump_pos_report",
+    "gnss_compare",
+    "gnss_compare_ref_filter",
+    "gnss_packets",
+    "gpsd_server",
+    "modem_profiles",
+    "nmea",
+    "rinex_writer",
+]

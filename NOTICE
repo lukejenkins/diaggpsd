@@ -1,0 +1,33 @@
+diaggpsd: live GNSS from a cellular modem's DIAG stream to gpsd clients + RINEX
+Copyright 2026 Luke Jenkins
+
+This product includes software developed by Luke Jenkins
+(https://github.com/lukejenkins).
+
+Licensed under the Apache License, Version 2.0. See the LICENSE file
+for the full license text.
+
+------------------------------------------------------------------------
+Acknowledgements
+------------------------------------------------------------------------
+
+Reverse-engineering and documentation of DIAG GNSS log records
+was pioneered by projects including openpilot's qcomgpsd, QCSuper, and
+SCAT. diaggpsd does not incorporate their code: the GNSS log-record
+struct definitions it relies on live in the separate diaggrok library and
+were re-derived clean-room there. diaggpsd itself is a first-party
+orchestration layer, but it stands on the reverse-engineering those
+projects contributed to the community.
+
+diaggpsd feeds gpsd clients by speaking the gpsd JSON protocol; it is not
+derived from, and does not replace, the gpsd daemon.
+
+------------------------------------------------------------------------
+Dependencies
+------------------------------------------------------------------------
+
+No third-party code is incorporated into diaggpsd itself. At install time
+it depends on two sibling libraries — diaggrok (DIAG GNSS parsers) and
+diagmunge (DIAG transport) — and, for the live AT-port path, on the
+optional `serial` extra (pyserial). Those are distributed separately
+under their own licenses and are not included in this repository.
