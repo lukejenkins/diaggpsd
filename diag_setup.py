@@ -213,10 +213,16 @@ def run_at_setup(at_port: str, profile: dict, cold_start: bool = False) -> None:
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description='Configure modem DIAG subsystem for GNSS logging')
-    parser.add_argument('--diag-port', default='/dev/ttyUSB0',
-                        help='DIAG port (serial path or tcp[:host:port])')
-    parser.add_argument('--at-port', default='/dev/ttyUSB2',
-                        help='AT command port')
+    parser.add_argument('--diag-port', default=None,
+                        help='DIAG port (serial path or tcp[:host:port]). '
+                             'Required for setup. No default: this is where the '
+                             'NV 7165 write lands, and /dev/ttyUSBn can name a '
+                             'different modem.')
+    parser.add_argument('--at-port', default=None,
+                        help='AT command port of the SAME modem as --diag-port. '
+                             'Required unless --no-at, or the profile has no AT '
+                             'vendor. No default: ttyUSB numbering is not stable, '
+                             'and a guessed port can be a different modem.')
     parser.add_argument('--chipset',
                         help='Chipset or modem name (e.g., mdm9607, eg25-g, sdx62)')
     parser.add_argument('--no-at', action='store_true',
@@ -288,6 +294,23 @@ def main():
     for note in profile.get('notes', []):
         if note.startswith('WARNING'):
             log.warning(note)
+
+    # Refuse BEFORE any DIAG write. A guessed DIAG port would write persistent
+    # NV to whichever modem owns it; a missing AT port would leave the
+    # modem half-configured.
+    if not args.diag_port:
+        parser.error(
+            "--diag-port is required: it is where the NV 7165 (OEMDRE) write "
+            "lands. Pass the DIAG port of the modem being configured, "
+            "preferably a /dev/serial/by-id path, or tcp[:host:port]. There is "
+            "no default: /dev/ttyUSBn can name a different modem.")
+    if not args.no_at and profile.get('at_vendor') and not args.at_port:
+        parser.error(
+            "--at-port is required to start GNSS over AT (vendor "
+            f"{profile['at_vendor']}). Pass the AT port of the same modem as "
+            "--diag-port, preferably a /dev/serial/by-id path, or --no-at if "
+            "GNSS is already running. There is no default: /dev/ttyUSBn can "
+            "name a different modem.")
 
     # DIAG setup
     mode, host, port = parse_diag_port(args.diag_port)

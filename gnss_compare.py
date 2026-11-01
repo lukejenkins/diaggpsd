@@ -13,6 +13,7 @@ Matches by GPS time (week + milliseconds) and compares:
 - Per-signal CNR via RTCM3 MSM7 (multi-frequency)
 """
 
+import argparse
 import json
 import math
 import os
@@ -464,9 +465,20 @@ def oemdre_no_comparison_reason(n_reports, reports_with_svs, matched):
             f"comparisons (no overlapping reference SVs / all filtered)")
 
 
-def main():
-    diag_path = sys.argv[1]
-    gpsd_path = sys.argv[2]
+def _parse_args(argv=None):
+    ap = argparse.ArgumentParser(
+        prog="diaggpsd-gnss-compare",
+        description=__doc__.split("\n\n")[0],
+    )
+    ap.add_argument("diag", help="diaggpsd DIAG output: parsed JSONL")
+    ap.add_argument("gpsd", help="gpsd ground truth: JSON log (TPV / SKY / RTCM3)")
+    return ap.parse_args(argv)
+
+
+def main(argv=None):
+    args = _parse_args(argv)
+    diag_path = args.diag
+    gpsd_path = args.gpsd
 
     positions, measurements, oemdre = load_diag(diag_path)
     fixes, skys, msm7 = load_gpsd(gpsd_path)
@@ -1036,7 +1048,4 @@ def main():
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print(f"Usage: {sys.argv[0]} <diag.jsonl> <gpsd.jsonl>")
-        sys.exit(1)
     main()

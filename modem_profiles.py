@@ -97,6 +97,22 @@ PROFILES = {
             'Check if DIAG GPS subsystem is active before attempting setup',
         ],
     },
+    'mdm9x40': {
+        'name': 'MDM9240/MDM9640',
+        'modems': ['EP06-A', 'EM06-A'],
+        'nv_items': {7165: 1},
+        'oemdre': True,
+        'oemdre_needs_reboot': True,
+        'at_vendor': 'quectel',
+        'notes': [
+            'OEM DRE (NV 7165 ACK, 0x14DE emission) unverified on MDM9x40 — '
+            'flip oemdre to False here if a live run shows NV 7165 does not ACK',
+            'EP06-A silicon is MDM9240 running an MDM9640.LE firmware build; '
+            'EM06-A reports MDM9640 — same family, same profile',
+            'AT+QGPS is the same standalone-only form as EG25-G (mode=1)',
+            'gnssconfig is an ENUM (EM12/EG12/EG18 family table): 1 = all constellations ON',
+        ],
+    },
     'mdm9x07': {
         'name': 'MDM9207/MDM9307',
         'modems': ['SIM7600NA', 'RC400L', 'R11e-LTE-US', 'BG95-M3'],

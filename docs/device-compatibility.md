@@ -24,8 +24,8 @@ GNSS capabilities by chipset generation. Constellations and frequencies listed a
 | MDM9207 (MDM9607 SoC) | LTE Cat 4 (2015) | GPS, GLONASS, BeiDou, Galileo | L1 | Gen 8 | EG25-G, EC25-AF, RC400L, R11e-LTE-US, LM1200 (EC25-AF), SIM7600NA-H, EG95NA, EP06-A |
 | MDM9230 | LTE Cat 6 (2014) | GPS, GLONASS, BeiDou | L1 | Gen 8 | MC7455 |
 | MDM9607 | LTE Cat 4-6 (2016) | GPS, GLONASS, BeiDou, Galileo | L1 | Gen 8 | Same die as MDM9207 entries above |
-| MDM9650 / SDX20 | LTE-A Cat 12-18 (2016) | GPS, GLONASS, BeiDou, Galileo, QZSS, NavIC | L1, L5 | Gen 9A | EM7511, T77W968 (DW5821e), LM960A18, EG12-GT, EM120R-GL, MC7411 |
-| SDX50M | LTE-A Pro Cat 18 (2018) | GPS, GLONASS, BeiDou, Galileo, QZSS, NavIC | L1, L5 | Gen 9A | MC7411 |
+| SDX20 | LTE-A Cat 12-18 (2016) | GPS, GLONASS, BeiDou, Galileo, QZSS, NavIC | L1, L5 | Gen 9A | T77W968 (DW5821e), LM960A18, EG12-GT, EM120R-GL |
+| MDM9250 | LTE DL Cat 7 / UL Cat 13 on MC7411; LTE-A Cat 12 on EM75xx (2016) | GPS, GLONASS, BeiDou, Galileo, QZSS (MC7411 PTS r7) | L1 | Unconfirmed | MC7411, EM7511, EM7565 (vendor PTS: MDM9250; firmware self-reports MDM9650; not SDX50M) |
 | SDX55 | 5G Sub-6 (2019) | GPS, GLONASS, BeiDou, Galileo, QZSS, NavIC | L1, L5 | Gen 9B | RM500Q-AE, EM9190, FN980m |
 | SDX62 | 5G SA/NSA (2021) | GPS, GLONASS, BeiDou, Galileo, QZSS, NavIC | L1, L5 | Gen 9C | CFW-3212 (RG520N-NA), RM520N-GL (-AA USB, -AP PCIe) |
 
@@ -56,7 +56,7 @@ GNSS capabilities by chipset generation. Constellations and frequencies listed a
 | **Telit LM960A18** | SDX20 | ❓ | AT#GPS* (Telit dialect) | ❌ Likely not possible | v1/v2 or v13 ❓ | Active 2D fix observed | SDX20 platform — GPS DIAG (ID 5) inactive on all tested SDX20 modules. |
 | **Sierra EM9190** | SDX55 | ❌ DIAG blocked | AT!GPS* (Sierra dialect) | ❌ Not possible | v13 (2477 bytes) | L1+L5 confirmed (AT!GPSSATINFO) | USB DIAG port non-functional even after AT!USBCOMP change. DIAG-over-QMI under investigation. |
 | **Sierra MC7455** | MDM9230 | USB serial (ttyUSB0, DIAG in composition) | AT!GPS* (Sierra dialect) | ❓ Untested | v1/v2 (291 bytes) | ❓ | Older MDM9230 generation. DIAG port in USB composition 0x0000010D. |
-| **Sierra MC7411** | SDX50M | USB serial (DIAG in composition) | AT!GPS* (Sierra dialect) | ❓ Untested | v1/v2 or v13 ❓ | ❓ | LTE-A Pro (Cat 18) platform. DIAG available. |
+| **Sierra MC7411** | MDM9250 | USB serial (DIAG in composition) | AT!GPS* (Sierra dialect) | ❓ Untested | v1/v2 or v13 ❓ | ❓ | LTE DL Cat 7 / UL Cat 13 platform (per the vendor PTS). DIAG available. |
 | **Telit FN980m** | SDX55 | USB serial (ttyUSB0) | AT$GPSP=1 ✅ | ✅ Working | v13 (2477 bytes) | GPS ✅, GLONASS ✅, Galileo ✅, BeiDou ✅ | GPS DIAG (ID 5) active. All 4 GNSS packet types confirmed. USB DM rejects LOG_CONFIG — use diag_socket_log. |
 | **Quectel BG95-M3** | MDM9205 | ❓ | AT+QGPS* (inferred) | ❓ Untested | ❓ Unknown | ❓ | LPWA module. DIAG availability unknown. May use different GNSS log format. |
 | **Quectel EG18-NA** | SDX20 V2 | USB serial (ttyUSB0) | AT+QGPS* ✅ | ✅ Working | **v10** (new) | GPS ✅, GLONASS ⚠️ (DIAG only), Galileo ⚠️ (DIAG only) | First SDX20 with active GPS DIAG. All 9 GNSS log codes confirmed. GLONASS/Galileo in DIAG but not NMEA. C/N0 10x scaled. |
@@ -83,7 +83,7 @@ GNSS capabilities by chipset generation. Constellations and frequencies listed a
 | **Soracom Onyx (EG25-G)** | Internal (USB dongle) | Internal trace antenna | ❓ Untested | Compact USB form factor; likely reduced GNSS performance vs standalone module. |
 | **RM500Q-AE** | Internal (M.2) | M.2 module, no dedicated ext antenna | ✅ Working | 10 GPS + 8 GLONASS SVs tracked (gnssconfig=1). 9 GPS + 2 GLONASS used in fix. |
 | **CFW-3212 (RG520N-NA)** | External (outdoor CPE) | Integrated in CPE housing | ✅ Confirmed fix | Outdoor-mounted unit. GNSS fix confirmed via AT+QGPSLOC. |
-| **RM520N-GL (-AA)** | External, M.2 GNSS U.FL | Bench antenna via splitter shared with the LG290P (when fitted) | ⚠️ Antenna moves between units | 3D fix (GPS+GAL+GLO, HDOP 0.9) on the 2026-04 LG290P bench. With the bench antenna moved to the EG18-NA, a re-check shows engine on, 0 SVs. `AT+QGPSLOC` → 516 means "engine on, no fix"; 505 means engine off. |
+| **RM520N-GL (-AA)** | External, M.2 GNSS U.FL | Bench antenna via splitter shared with the LG290P (when fitted) | ⚠️ Antenna moves between units | 3D fix (GPS+GAL+GLO, HDOP 0.9) on the LG290P bench. With the bench antenna moved to the EG18-NA, a re-check shows engine on, 0 SVs. `AT+QGPSLOC` → 516 means "engine on, no fix"; 505 means engine off. |
 | **RM520N-GL-AP (GL-XE3000 unit, PCIe bench unit)** | None connected | M.2 slot (GL-XE3000 / bench host PCIe `01:00.0`) | ❓ Untested | PCIe-only units. No GNSS antenna recorded on either. Bench unit: engine on, 0 SVs used, `AT+QGPSLOC` → 516. |
 | **EM7511** | None connected | M.2 module, no antenna attached | ⚠️ No signal | GPS engine active but clock at epoch, no satellites tracked. Needs external GNSS antenna. |
 | **RC400L** | None functional | ❌ No usable GNSS antenna | ❌ No signal | Hardware limitation confirmed. RF front-end cannot acquire L1 signals. SBAS detected at marginal SNR only. |
@@ -108,7 +108,7 @@ GNSS capabilities by chipset generation. Constellations and frequencies listed a
 | MDM9207 / MDM9607 | v1/v2 | 291 bytes | ✅ Confirmed (EG25-G) |
 | MDM9230 | v1/v2 | 291 bytes | ❓ Inferred (same DIAG generation) |
 | MDM9650 / SDX20 | v1/v2 or v13 | 291 or 2477 bytes | ❓ Untested — may use either format depending on firmware |
-| SDX50M | v1/v2 or v13 | Unknown | ❓ Untested |
+| MDM9250 | v1/v2 or v13 | Unknown | ❓ Untested |
 | SDX55 | v13 | 2477 bytes | ✅ Confirmed (RM500Q-AE) |
 | SDX62 | **v24 (0x18)** | Variable, 1245–2895 bytes (N × 30 B SV array) | ✅ Confirmed (RM520N-GL: 1540/1540 records v24; 616 LG290P epochs at 2.59 m median. CFW-3212 emits the same variant.) Early RM520N-GL firmware also emitted a few **v21 (0x15)** records (1547 B fix / 647 B prediction), which decode on the v24 DOP offset @461. **R01A08 (RM520N-GL-AP, `_11.200.11.200`) emits v21 only:** 62/62 records, all 647 B prediction epochs (no antenna). |
 
@@ -197,7 +197,7 @@ Devices ranked by testing value for diaggpsd development:
 | 3 | Quectel EP06-A | MDM9640 | GPS DIAG (ID 5) active. Same profile as EG25-G. Live diaggpsd test needed. |
 | 4 | SIMCom SIM7600NA-H | MDM9607 | Tests SIMCom firmware variant of MDM9607. DIAG on ttyUSB0. |
 | 5 | Sierra MC7455 | MDM9230 | Older chipset. Tests MDM9230 log code compatibility. |
-| 6 | Sierra MC7411 | SDX50M | Tests SDX50M (between SDX20 and SDX55). |
+| 6 | Sierra MC7411 | MDM9250 | Tests MDM9250 (the 9x50 generation alongside MDM9650). |
 | 7 | Quectel RM520N-GL-AP | SDX62 | ⚠️ Transport + v21 parsing measured on a PCIe bench host. Remaining: fit a GNSS antenna and compare a fix with `AT+QGPSLOC=2`; run the GL-XE3000 unit (R03A04). |
 | — | ~~Quectel RM520N-GL (-AA)~~ | SDX62 | ✅ Tested. v24 PositionReport validated against LG290P (2.59 m). Still open: BeiDou B1I and the GLONASS used-count bug. |
 | — | ~~Sierra EM9190~~ | SDX55 | ❌ DIAG blocked. QMI-encapsulated DIAG under investigation. |

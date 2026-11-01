@@ -17,8 +17,8 @@ requires-python = ">=3.11"
 # the tags with each re-verify; repoint to `diaggrok>=X.Y` / `diagmunge>=X.Y`
 # once they are published.
 dependencies = [
-    "diaggrok @ git+https://github.com/lukejenkins/diaggrok@v2026.10.12",
-    "diagmunge @ git+https://github.com/lukejenkins/diagmunge@v2026.10.13",
+    "diaggrok @ git+https://github.com/lukejenkins/diaggrok@v2026.10.31",
+    "diagmunge @ git+https://github.com/lukejenkins/diagmunge@v2026.10.31",
 ]
 
 [project.optional-dependencies]
