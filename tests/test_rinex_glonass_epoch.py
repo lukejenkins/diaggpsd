@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import io
 
-import rinex_writer as rw
+from diaggpsd import rinex_writer as rw
 
 GPS_WEEK, GPS_MS = 2418, 455_452_893
 GLO_CYCLE, GLO_DAY, GLO_MS = 8, 866, 34_234_893

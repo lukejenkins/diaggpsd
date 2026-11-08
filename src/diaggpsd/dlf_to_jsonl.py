@@ -35,7 +35,7 @@ from pathlib import Path
 # diaggrok / diagmunge resolve via -libs.pth (no source-tree insert needed).
 _app_dir = Path(__file__).parent
 if str(_app_dir) not in sys.path:
-    sys.path.insert(0, str(_app_dir))
+    pass  # package layout: no sys.path self-insert
 
 from diagmunge.munge.replay import (  # noqa: E402  # GNSS-free replay core
     UnsupportedFormatError,
@@ -46,8 +46,8 @@ from diagmunge.munge.replay import (  # noqa: E402  # GNSS-free replay core
     read_chunks,
     replay_to_jsonl,
 )
-from gnss_packets import ALL_LOG_CODES, dispatch  # noqa: E402
-from rinex_writer import (  # noqa: E402
+from .gnss_packets import ALL_LOG_CODES, dispatch  # noqa: E402
+from .rinex_writer import (  # noqa: E402
     Epoch,
     RinexHeaderConfig,
     RinexObsWriter,

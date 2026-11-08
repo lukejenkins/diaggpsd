@@ -12,7 +12,7 @@ import math
 import pytest
 
 from diaggrok.parsers.diag_0x1476 import Diag0x1476
-from gpsd_server import GpsdServer
+from diaggpsd.gpsd_server import GpsdServer
 
 SENTINEL = 599584.9375
 

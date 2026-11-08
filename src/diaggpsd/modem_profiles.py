@@ -9,7 +9,7 @@ Each profile defines what a chipset needs for GNSS DIAG to work:
 Log code subscription is NOT here — it's per-connection state handled by diaggpsd.
 """
 
-from gnss_packets import ALL_LOG_CODES
+from .gnss_packets import ALL_LOG_CODES
 
 
 PROFILES = {

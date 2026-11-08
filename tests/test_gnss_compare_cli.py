@@ -10,7 +10,7 @@ TOOL = Path(__file__).resolve().parents[1] / "gnss_compare.py"
 
 
 def _run(*args):
-    return subprocess.run([sys.executable, str(TOOL), *args],
+    return subprocess.run([sys.executable, "-m", "diaggpsd.gnss_compare", *args],
                           capture_output=True, text=True, timeout=60)
 
 

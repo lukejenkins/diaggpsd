@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import io
 
-import rinex_writer as rw
+from diaggpsd import rinex_writer as rw
 
 
 def _gps(log_time, week, ms=10_305_517):

@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import pytest
 
-import nmea
+from diaggpsd import nmea
 from test_nmea_5535 import WEEK, pos
 
 TOW_MS = 56_981_000       # the capture's live TOW

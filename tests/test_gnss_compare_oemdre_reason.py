@@ -11,7 +11,7 @@ The conftest in this directory puts apps/diaggpsd on sys.path.
 """
 from __future__ import annotations
 
-import gnss_compare as gc
+from diaggpsd import gnss_compare as gc
 
 
 def test_empty_shells_not_blamed_on_timing():

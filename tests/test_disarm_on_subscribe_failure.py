@@ -17,7 +17,7 @@ from struct import pack
 
 import pytest
 
-import diaggpsd
+from diaggpsd import diaggpsd
 from diagmunge import DIAG_BAD_CMD_F, DIAG_LOG_CONFIG_F, DIAG_LOG_F
 
 DISABLE_REQ = pack('<3xI', diaggpsd.LOG_CFG_DISABLE)

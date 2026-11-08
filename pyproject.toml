@@ -1,9 +1,27 @@
 [project]
 name = "diaggpsd"
-version = "0.1.0"
+version = "2026.11.8"
 description = "Live GNSS from a Qualcomm modem's DIAG stream — serves gpsd clients and writes RINEX"
 license = "Apache-2.0"
 requires-python = ">=3.11"
+readme = "README.md"
+authors = [{ name = "Luke Jenkins" }]
+keywords = ["diag", "modem", "cellular", "baseband", "lte", "5g"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Telecommunications Industry",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Communications",
+    "Topic :: System :: Hardware",
+]
 # Hard, import-time dependencies — both inward edges to already-public siblings:
 #   - diagmunge: the DIAG transport core (DiagClient + DIAG_LOG_F), imported at
 #     module scope in diaggpsd.py / diag_setup.py / dump_pos_report.py and via
@@ -11,14 +29,13 @@ requires-python = ">=3.11"
 #   - diaggrok:  the GNSS log-record parsers, imported at module scope through
 #     the gnss_packets.py re-export shim.
 # Edge direction is inward-only: diaggpsd -> {diagmunge, diaggrok}. Never the
-# reverse. Neither sibling is on PyPI yet, so a bare name would not resolve:
-# both come from the public git remotes, pinned to the release tags this
-# package's full suite was verified against in an isolated venv. Bump
-# the tags with each re-verify; repoint to `diaggrok>=X.Y` / `diagmunge>=X.Y`
-# once they are published.
+# reverse. Bare PyPI names, each floored at the sibling release this package's
+# full suite was verified against in an isolated venv; PyPI
+# rejects direct-URL deps. Release order: diaggrok and diagmunge must be on
+# PyPI before this package is uploaded.
 dependencies = [
-    "diaggrok @ git+https://github.com/lukejenkins/diaggrok@v2026.10.31",
-    "diagmunge @ git+https://github.com/lukejenkins/diagmunge@v2026.10.31",
+    "diaggrok>=2026.11.8",
+    "diagmunge>=2026.11.8",
 ]
 
 [project.optional-dependencies]
@@ -30,32 +47,25 @@ serial = ["pyserial"]
 
 [project.scripts]
 # The live daemon: DIAG -> gpsd JSON server (+ optional RINEX).
-diaggpsd = "diaggpsd:main"
+diaggpsd = "diaggpsd.diaggpsd:main"
 # Offline tooling shipped alongside the daemon.
-diaggpsd-diag-setup = "diag_setup:main"
-diaggpsd-dlf-to-jsonl = "dlf_to_jsonl:main"
-diaggpsd-dump-pos-report = "dump_pos_report:main"
-diaggpsd-gnss-compare = "gnss_compare:main"
+diaggpsd-diag-setup = "diaggpsd.diag_setup:main"
+diaggpsd-dlf-to-jsonl = "diaggpsd.dlf_to_jsonl:main"
+diaggpsd-dump-pos-report = "diaggpsd.dump_pos_report:main"
+diaggpsd-gnss-compare = "diaggpsd.gnss_compare:main"
+
+[project.urls]
+Homepage = "https://github.com/lukejenkins/diaggpsd"
+Source = "https://github.com/lukejenkins/diaggpsd"
+Changelog = "https://github.com/lukejenkins/diaggpsd/releases"
 
 [build-system]
-requires = ["setuptools>=68.0"]
+requires = ["setuptools>=77.0"]
 build-backend = "setuptools.build_meta"
 
-# Script collection, not an installable package tree: in the public carve each
-# module is copied to the repo root beside this file. `gnss_packets` is a thin
-# re-export shim over the diaggrok parsers.
-[tool.setuptools]
-py-modules = [
-    "diaggpsd",
-    "at",
-    "diag_setup",
-    "dlf_to_jsonl",
-    "dump_pos_report",
-    "gnss_compare",
-    "gnss_compare_ref_filter",
-    "gnss_packets",
-    "gpsd_server",
-    "modem_profiles",
-    "nmea",
-    "rinex_writer",
-]
+# The modules live flat in the source tree beside each other; the public carve
+# packages them under src/diaggpsd/ so a pip install adds one top-level name
+# (`diaggpsd`), not twelve generic ones like `at` and `nmea`. `gnss_packets`
+# is a thin re-export shim over the diaggrok parsers.
+[tool.setuptools.packages.find]
+where = ["src"]

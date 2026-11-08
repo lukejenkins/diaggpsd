@@ -11,7 +11,7 @@ APP = Path(__file__).resolve().parents[1]
 _PROBE = """
 import json, sys
 sys.path.insert(0, %r)
-import diaggpsd
+from diaggpsd import diaggpsd
 import diaggrok.registry as r
 codes = sorted(diaggpsd.required_codes(gpsd=True, json_out=True, rinex=True))
 # Read _registry/_overrides directly: the public accessors would trigger the sweep.

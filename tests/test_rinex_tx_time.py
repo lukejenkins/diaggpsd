@@ -20,8 +20,8 @@ import io
 
 import pytest
 
-import gnss_packets
-import rinex_writer as rw
+from diaggpsd import gnss_packets
+from diaggpsd import rinex_writer as rw
 
 C_KM_PER_MS = rw.C_LIGHT / 1e6
 

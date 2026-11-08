@@ -17,7 +17,10 @@ works where no kernel GPS driver or NMEA port is exposed.
 
 ## Layout
 
-diaggpsd is a small collection of scripts installed side by side:
+diaggpsd is one Python package, `diaggpsd`, under `src/diaggpsd/`. Its
+console commands (`diaggpsd`, `diaggpsd-diag-setup`, `diaggpsd-dlf-to-jsonl`,
+`diaggpsd-dump-pos-report`, `diaggpsd-gnss-compare`) are the supported way to
+run it; `python -m diaggpsd` starts the daemon too. The modules:
 
 | Module | Role |
 |--------|------|
@@ -46,10 +49,16 @@ The live AT-port path additionally needs **pyserial**, installed via the
 optional `serial` extra. DIAG capture, replay, decode, RINEX, and the gpsd
 server are all pyserial-free.
 
+From [PyPI](https://pypi.org/project/diaggpsd/):
+
 ```bash
-pip install .            # daemon + gpsd server + offline tooling
-pip install '.[serial]'  # + the live AT-port path (pyserial)
+pip install diaggpsd             # daemon + gpsd server + offline tooling
+pip install "diaggpsd[serial]"   # + the live AT-port path (pyserial)
 ```
+
+diaggrok and diagmunge come from PyPI with it. Each PyPI version is the same
+code as the GitHub tag of the same number (`diaggpsd==2026.11.8` is tag
+`v2026.11.8`). From a clone, `pip install .` works the same way.
 
 Requires Python 3.11+.
 

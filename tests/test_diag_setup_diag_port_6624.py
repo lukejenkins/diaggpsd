@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-import diag_setup
+from diaggpsd import diag_setup
 from test_diag_setup_at_port_6585 import _main, rec  # noqa: F401  (fixture)
 
 

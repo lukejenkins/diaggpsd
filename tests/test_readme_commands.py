@@ -14,8 +14,8 @@ from pathlib import Path
 
 import pytest
 
-import diag_setup
-import diaggpsd
+from diaggpsd import diag_setup
+from diaggpsd import diaggpsd
 
 _HERE = Path(__file__).resolve()
 _CANDIDATES = (

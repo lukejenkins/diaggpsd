@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 
-import gnss_compare as gc
+from diaggpsd import gnss_compare as gc
 
 
 _REF_2026 = datetime(2026, 6, 2, 22, 37, 45, tzinfo=timezone.utc)

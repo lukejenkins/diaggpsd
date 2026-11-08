@@ -43,8 +43,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # Reuse gnss_compare helpers — gps_to_utc + haversine_m + _find_closest.
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gnss_compare import gps_to_utc, haversine_m  # noqa: E402
+pass  # package layout: no sys.path self-insert
+from .gnss_compare import gps_to_utc, haversine_m  # noqa: E402
 
 
 # --- constellation detection ------------------------------------------------

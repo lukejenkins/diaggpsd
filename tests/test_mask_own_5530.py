@@ -10,7 +10,7 @@ from struct import pack
 
 import pytest
 
-import diaggpsd
+from diaggpsd import diaggpsd
 from diagmunge import DiagClient
 from diagmunge.framefilter import FrameFilter
 from diagmunge.presets import GNSS_EXTENDED

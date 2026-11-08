@@ -10,7 +10,7 @@ import json
 
 import pytest
 
-import diaggpsd
+from diaggpsd import diaggpsd
 
 
 def test_bytes_fields_are_hex_encoded():
@@ -35,7 +35,7 @@ def test_other_unserialisable_types_still_raise():
 
 def test_live_parsers_emitting_bytes_now_serialise():
     """Feed a real registered parser that returns body_raw bytes."""
-    import gnss_packets
+    from diaggpsd import gnss_packets
     pkt = gnss_packets.dispatch(0x1022, 0, bytes(68))
     if pkt is None:
         pytest.skip("0x1022 parser rejected the synthetic payload")

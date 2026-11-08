@@ -43,14 +43,14 @@ import os
 _lazy_set = "DIAGGROK_LAZY_PARSERS" not in os.environ
 if _lazy_set:
     os.environ["DIAGGROK_LAZY_PARSERS"] = "1"
-import gnss_packets
+from . import gnss_packets
 if _lazy_set:
     del os.environ["DIAGGROK_LAZY_PARSERS"]
 from diagmunge import DiagClient, DIAG_BAD_CMD_F, DIAG_LOG_CONFIG_F
 from diagmunge.framefilter import MULTI_RADIO_WRAPPER_OFFSET, FrameFilter
 from diagmunge.transport import BrokerError
 from diagmunge import maskstate
-from gnss_packets import (
+from .gnss_packets import (
     PositionReport, GpsMeasurementReport,
     GlonassMeasurementReport, GalileoMeasurementReport,
     OemdreMeasurementReport, OemdreSvPolyReport,
@@ -411,7 +411,7 @@ def main() -> None:
         log.info(f"Recording to {args.record}")
 
     if args.rinex_out:
-        from rinex_writer import LiveRinexWriter, RinexHeaderConfig
+        from .rinex_writer import LiveRinexWriter, RinexHeaderConfig
         rinex_file = open(args.rinex_out, 'w')
         rinex_writer = LiveRinexWriter(
             rinex_file,
@@ -431,7 +431,7 @@ def main() -> None:
         log.error(f"--nmea-talker must be two letters, not {args.nmea_talker!r}")
         sys.exit(2)
     for spec in args.nmea_out:
-        import nmea
+        from . import nmea
         nmea_sinks.append(nmea.open_sink(spec))
         log.info(f"NMEA output: {spec}")
 
@@ -480,7 +480,7 @@ def main() -> None:
 
     # --- Start optional servers ---
     if not args.no_gpsd:
-        from gpsd_server import GpsdServer
+        from .gpsd_server import GpsdServer
         gpsd_server = GpsdServer(port=args.gpsd_port)
         gpsd_server.start()
 
@@ -523,7 +523,7 @@ def main() -> None:
     need_json = (not args.no_stdout or record_file is not None
                  or raw_server is not None or rinex_writer is not None)
     if nmea_sinks:
-        from nmea import EpochGate, from_position as nmea_from_position
+        from .nmea import EpochGate, from_position as nmea_from_position
         nmea_gate = EpochGate()
 
     # --- Main loop ---

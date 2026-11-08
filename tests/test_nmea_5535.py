@@ -23,7 +23,7 @@ from types import SimpleNamespace
 
 import pytest
 
-import nmea
+from diaggpsd import nmea
 
 APP = Path(__file__).resolve().parents[1]
 REPO = APP.parents[1]
@@ -166,7 +166,7 @@ def hdlc(payload: bytes) -> bytes:
 
 
 def test_synthetic_v13_record_round_trips():
-    import gnss_packets as gp
+    from diaggpsd import gnss_packets as gp
     pm, lt, ts, pl = gp.parse_outer_frame(log_frame(0x1476, v13_record())[1:])
     p = gp.dispatch(lt, ts, pl)
     assert isinstance(p, gp.PositionReport) and p.version == 13
@@ -190,7 +190,7 @@ def test_diaggpsd_emits_nmea_on_stdout_end_to_end(tmp_path):
     port = _free_udp_port()
     nmea_file = tmp_path / "out.nmea"
     proc = subprocess.Popen(
-        [sys.executable, str(APP / "diaggpsd.py"), "--diag-port", f"udp-listen:127.0.0.1:{port}",
+        [sys.executable, "-m", "diaggpsd.diaggpsd", "--diag-port", f"udp-listen:127.0.0.1:{port}",
          "--mask", "none", "--no-gpsd", "--nmea-out", "-", "--nmea-out", f"file:{nmea_file}"],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=str(APP))
     try:
@@ -217,7 +217,7 @@ def test_diaggpsd_emits_nmea_on_stdout_end_to_end(tmp_path):
             proc.wait(10)
         except subprocess.TimeoutExpired:
             proc.kill()
-    import gnss_packets as gp
+    from diaggpsd import gnss_packets as gp
     pm, lt, ts, pl = gp.parse_outer_frame(log_frame(0x1476, v13_record())[1:])
     want_gga = nmea.from_position(gp.dispatch(lt, ts, pl))[0].strip()
     lines = out.decode().splitlines()

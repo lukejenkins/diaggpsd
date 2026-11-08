@@ -28,7 +28,7 @@ import threading
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from gnss_packets import (GlonassMeasurementReport, GpsMeasurementReport,
+    from .gnss_packets import (GlonassMeasurementReport, GpsMeasurementReport,
                                PositionReport)
 
 logger = logging.getLogger(__name__)
@@ -288,7 +288,7 @@ class GpsdServer:
         A satellite is considered "used" if its carrier_noise > 0 and the
         measurementNotUsable bit (bit 13) is not set in measurement_status.
         """
-        from gnss_packets import OemdreMeasurementReport
+        from .gnss_packets import OemdreMeasurementReport
         sats = []
 
         if isinstance(meas, OemdreMeasurementReport):

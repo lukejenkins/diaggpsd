@@ -21,7 +21,7 @@ from __future__ import annotations
 def test_gnss_packets_imports_without_error():
     """The shim must import. Any ModuleNotFoundError here means a
     diaggrok parser was renamed/split without updating gnss_packets.py."""
-    import gnss_packets  # noqa: F401
+    from diaggpsd import gnss_packets  # noqa: F401
 
 
 def test_gnss_packets_registers_expected_parsers():
@@ -32,7 +32,7 @@ def test_gnss_packets_registers_expected_parsers():
     will break the import itself (caught by the test above), and
     enumerating here would force test churn on every harmless rename.
     """
-    import gnss_packets as g
+    from diaggpsd import gnss_packets as g
 
     assert g.ALL_LOG_CODES, (
         "gnss_packets must register at least one parser — "
@@ -59,7 +59,7 @@ def test_gnss_packets_backcompat_aliases_resolve():
     resolve to the new Diag0xCCCC classes. Existing diaggpsd code uses
     these in isinstance() checks; the shim's whole purpose is to keep
     those callers working transparently across the rename campaign."""
-    import gnss_packets as g
+    from diaggpsd import gnss_packets as g
 
     # Each aliased class must equal the new Diag0xCCCC symbol.
     assert g.OemdreMeasurementReport is g.Diag0x14DE

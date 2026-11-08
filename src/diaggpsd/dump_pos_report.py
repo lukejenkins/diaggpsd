@@ -22,11 +22,11 @@ import sys
 import os
 
 # Allow importing diag.py from the same directory
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+pass  # package layout: no sys.path self-insert
 
 from diagmunge import DiagClient, DIAG_LOG_F
-from diag_setup import parse_diag_port
-from gnss_packets import ALL_LOG_CODES, parse_outer_frame, LOG_GNSS_POSITION_REPORT
+from .diag_setup import parse_diag_port
+from .gnss_packets import ALL_LOG_CODES, parse_outer_frame, LOG_GNSS_POSITION_REPORT
 
 
 def hexdump(data: bytes, indent: str = '  ') -> None:

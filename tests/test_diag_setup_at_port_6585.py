@@ -12,7 +12,7 @@ import sys
 
 import pytest
 
-import diag_setup
+from diaggpsd import diag_setup
 
 
 class _Recorder:

@@ -34,7 +34,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from diagmunge import DiagClient
-from modem_profiles import get_profile, list_profiles
+from .modem_profiles import get_profile, list_profiles
 
 log = logging.getLogger('diag_setup')
 
@@ -201,7 +201,7 @@ def run_at_setup(at_port: str, profile: dict, cold_start: bool = False) -> None:
         log.warning("Start GNSS manually with the correct vendor AT commands")
         return
 
-    from at import create_at_serial
+    from .at import create_at_serial
     at = create_at_serial(vendor=vendor, port=at_port)
     log.info(f"AT port {at_port}: starting GPS (vendor={vendor})")
     at.start_gps(cold_start=cold_start)

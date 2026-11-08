@@ -17,8 +17,8 @@ from pathlib import Path
 
 import pytest
 
-import diaggpsd
-import nmea
+from diaggpsd import diaggpsd
+from diaggpsd import nmea
 from test_nmea_5535 import hdlc, log_frame, v13_record
 
 APP = Path(__file__).resolve().parents[1]
@@ -42,7 +42,7 @@ def test_declaration_is_exactly_the_required_codes():
 
 
 def test_mask_own_is_refused_on_a_broker():
-    r = subprocess.run([sys.executable, str(APP / "diaggpsd.py"), "--diag-port", "broker:127.0.0.1:9",
+    r = subprocess.run([sys.executable, "-m", "diaggpsd.diaggpsd", "--diag-port", "broker:127.0.0.1:9",
                         "--mask", "own", "--no-gpsd"], capture_output=True, text=True, cwd=str(APP),
                        timeout=60)
     assert r.returncode == 2
@@ -79,7 +79,7 @@ def test_end_to_end_behind_a_fake_broker():
     th = threading.Thread(target=broker, daemon=True)
     th.start()
     proc = subprocess.Popen(
-        [sys.executable, str(APP / "diaggpsd.py"), "--diag-port", f"broker:127.0.0.1:{port}",
+        [sys.executable, "-m", "diaggpsd.diaggpsd", "--diag-port", f"broker:127.0.0.1:{port}",
          "--no-gpsd", "--nmea-out", "-"],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=str(APP))
     out = b""
@@ -102,7 +102,7 @@ def test_end_to_end_behind_a_fake_broker():
         srv.close()
     assert got["sub"].startswith(b"SUB ")
     assert json.loads(got["sub"][4:]) == {"name": "diaggpsd", "log_codes": [0x1476]}
-    import gnss_packets as gp
+    from diaggpsd import gnss_packets as gp
     pm, lt, ts, pl = gp.parse_outer_frame(log_frame(0x1476, v13_record())[1:])
     want = nmea.from_position(gp.dispatch(lt, ts, pl))[0].strip()
     assert want in out.decode().splitlines(), proc.stderr.read().decode()[-2000:]

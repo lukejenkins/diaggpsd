@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import pytest
 
-import diaggpsd
+from diaggpsd import diaggpsd
 
 
 @pytest.mark.parametrize("spec, expected", [

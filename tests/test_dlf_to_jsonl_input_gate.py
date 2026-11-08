@@ -25,7 +25,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import dlf_to_jsonl  # noqa: E402
+from diaggpsd import dlf_to_jsonl  # noqa: E402
 
 # A tiny, well-formed raw-HDLC capture: two 0x7E-delimited frames. The exact
 # log payloads don't matter — the test asserts FIFO/stdin parse-equivalence
