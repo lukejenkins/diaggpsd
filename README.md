@@ -167,4 +167,4 @@ documentation those projects contributed to the community.
 
 ## License
 
-Apache-2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+Apache-2.0. See [LICENSE](https://github.com/lukejenkins/diaggpsd/blob/main/LICENSE) and [NOTICE](https://github.com/lukejenkins/diaggpsd/blob/main/NOTICE).

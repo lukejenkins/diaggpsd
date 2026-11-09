@@ -1,14 +1,15 @@
 [project]
 name = "diaggpsd"
-version = "2026.11.8"
+version = "2026.11.8.post1"
 description = "Live GNSS from a Qualcomm modem's DIAG stream — serves gpsd clients and writes RINEX"
 license = "Apache-2.0"
 requires-python = ">=3.11"
 readme = "README.md"
 authors = [{ name = "Luke Jenkins" }]
-keywords = ["diag", "modem", "cellular", "baseband", "lte", "5g"]
+keywords = ["diag", "modem", "cellular", "baseband", "lte", "5g", "gnss", "gps", "rinex", "nmea"]
 classifiers = [
     "Development Status :: 4 - Beta",
+    "Environment :: Console",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Intended Audience :: Telecommunications Industry",
@@ -21,6 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
     "Topic :: Communications",
     "Topic :: System :: Hardware",
+    "Topic :: Scientific/Engineering :: GIS",
 ]
 # Hard, import-time dependencies — both inward edges to already-public siblings:
 #   - diagmunge: the DIAG transport core (DiagClient + DIAG_LOG_F), imported at
